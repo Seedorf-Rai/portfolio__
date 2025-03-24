@@ -1,9 +1,14 @@
-import { Client, Account } from 'appwrite';
+import { Client, Account , Databases } from 'appwrite';
 
 const client = new Client();
 
 client
-//   .setEndpoint('http://localhost/v1') // Your Appwrite Endpoint
-  .setProject('67cd29be003cd50c4c04'); // Your project ID
+  .setEndpoint(import.meta.env.VITE_ENDPOINT) // Your Appwrite Endpoint
+  .setProject(import.meta.env.VITE_PROJECT_ID); // Your project ID
+
 
 export const account = new Account(client);
+
+export const databases = new Databases(client);
+
+

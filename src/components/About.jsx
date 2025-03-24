@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import AboutPic from "../../src/assets/about.jpg"
 import { motion } from "framer-motion"
+import { databases } from "../appwrite";
 function About(){
-    return(
+
+  const [about , setAbout] = useState("");
+
+  const init = async () => {
+    const about = await databases.listDocuments(
+      import.meta.env.VITE_DATABASE_ID,
+      import.meta.env.VITE_COLLECTION_ID_ABOUT
+    );
+    setAbout(about.documents[0]);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  return(
         <div className="border-b border-neutral-900 pb-4">
           <h1 className="my-20 text-center text-4xl">
             About <span className="text-neutral-500">
@@ -15,7 +32,7 @@ function About(){
             transition={{ duration: 0.5 }}
              className="w-full lg:w-1/2 lg:p-8">
              <div className="flex items-center justify-center">
-               <img className="rounded-2xl" src={AboutPic} alt="" />
+               <img className="rounded-2xl w-full h-auto object-cover" src={about.image} alt="" />
              </div>
 
             </motion.div>
@@ -24,8 +41,11 @@ function About(){
             initial={{ opacity: 0, x: 100 }}
             transition={{ duration: 0.5 }}
             className="w-full py-5 px-5 lg:px-0 lg:w-1/2 ">
-               <div className="flex justify-center my-2 max-w-x; lg:justify-start">
-                 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde eveniet corporis provident quae commodi voluptatibus incidunt quasi similique quod doloribus ipsam dolores quibusdam facere esse facilis ab, tenetur aut quis maxime sequi ea. Illum tempore architecto eos debitis officia ipsum distinctio. Incidunt delectus corrupti placeat distinctio doloremque cumque asperiores atque adipisci pariatur quaerat, exercitationem soluta! Pariatur sequi reprehenderit nisi sit dolorum tempora possimus nemo itaque. Neque quod magni dolorum sequi, excepturi nesciunt doloremque repellat optio saepe. Sunt expedita mollitia, ipsam culpa aperiam reiciendis quasi cumque, alias soluta corporis quibusdam autem eius voluptatum, in dolore odit eum odio enim officiis! Commodi!
+               <div className="flex justify-center my-2  max-w-x; lg:justify-start my-2 max-w-xl motion.py-6 font-light
+           tracking-tighter">
+                 {
+                  about.description
+                 }
                </div>
              </motion.div>
           </div>

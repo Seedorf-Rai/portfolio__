@@ -1,18 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { databases } from "../appwrite";
 
-export default function Project() {
+export default function RandD() {
   const [showAll, setShowAll] = useState(false);
+  const [projects, setProjects] = useState([]);
+  // const projects = [
+  //   { id: 1, title: "Image Segmentation Project", image: 'https://images.pexels.com/photos/132477/pexels-photo-132477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["Python", "TensorFlow", "Keras", "OpenCV"], description: 'Course of Computer Science Lorem ipsum dolor sit amet consectetur.' },
+  //   { id: 2, title: "NLP Chatbot", image: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["Python", "NLTK", "TensorFlow", "Flask"], description: 'Natural Language Processing chatbot using neural networks.' },
+  //   { id: 3, title: "E-commerce Website", image: 'https://images.pexels.com/photos/5935792/pexels-photo-5935792.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "Node.js", "MongoDB", "TailwindCSS"], description: 'Full stack e-commerce platform with admin panel.' },
+  //   { id: 4, title: "Portfolio Website", image: 'https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "Framer Motion", "TailwindCSS"], description: 'Interactive portfolio showcasing projects and animations.' },
+  //   { id: 5, title: "Weather App", image: 'https://images.pexels.com/photos/355770/pexels-photo-355770.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "API", "TailwindCSS"], description: 'Real-time weather app fetching data from open APIs.' }
+  // ];
+  const [visibleProjects, setVisibleProjects] = useState([]);
+  const init = async () => {
+    const rndd = await databases.listDocuments(
+      import.meta.env.VITE_DATABASE_ID,
+      import.meta.env.VITE_COLLECTION_ID_PROJECT
+    );
+    setProjects(rndd.documents);
+    console.log(rndd.documents);
 
-  const projects = [
-    { id: 1, title: "Image Segmentation Project", image: 'https://images.pexels.com/photos/132477/pexels-photo-132477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["Python", "TensorFlow", "Keras", "OpenCV"], description: 'Course of Computer Science Lorem ipsum dolor sit amet consectetur.' },
-    { id: 2, title: "NLP Chatbot", image: 'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["Python", "NLTK", "TensorFlow", "Flask"], description: 'Natural Language Processing chatbot using neural networks.' },
-    { id: 3, title: "E-commerce Website", image: 'https://images.pexels.com/photos/5935792/pexels-photo-5935792.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "Node.js", "MongoDB", "TailwindCSS"], description: 'Full stack e-commerce platform with admin panel.' },
-    { id: 4, title: "Portfolio Website", image: 'https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "Framer Motion", "TailwindCSS"], description: 'Interactive portfolio showcasing projects and animations.' },
-    { id: 5, title: "Weather App", image: 'https://images.pexels.com/photos/355770/pexels-photo-355770.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2', technologies: ["React", "API", "TailwindCSS"], description: 'Real-time weather app fetching data from open APIs.' }
-  ];
+  };
 
-  const visibleProjects = showAll ? projects : projects.slice(0, 3);
+  useEffect(() => {
+    init();
+    console.log(projects);
+
+  }, []);
+  useEffect(() => {
+    if (projects.length > 0) { // Ensure projects are loaded before setting visibleProjects
+      if (showAll) {
+        setVisibleProjects(projects);
+      } else {
+        setVisibleProjects(projects.slice(0, 3));
+      }
+    }
+  }, [showAll, projects]); // Add projects as a dependency
+  // const visibleProjects = showAll ? projects : projects.slice(0, 3);
+
+
+
 
   return (
     <div className="border-b border-neutral-500 pb-4">
@@ -44,20 +72,24 @@ export default function Project() {
             >
               <h6 className="mb-2 font-semibold">{project.title}</h6>
               <p className="mb-4 text-neutral-400">{project.description}</p>
+              <div className="flex flex-wrap  ">
               {project.technologies.map((tech, index) => (
-                <span
+
+                  <p
                   key={index}
-                  className="mr-2 px-2 py-1 bg-neutral-900 text-sm font-medium text-purple-900"
+                  className="mr-2 px-2 py-1 mb-2 bg-neutral-900 text-sm font-medium text-purple-900"
                 >
                   {tech}
-                </span>
+                </p>
+
               ))}
+              </div>
             </motion.div>
           </div>
         ))}
       </div>
 
-      {!showAll && (
+      {!showAll && projects.length > 3 && (
         <button
           onClick={() => setShowAll(true)}
           className="mx-auto block mt-8 bg-purple-900 text-white px-4 py-2 rounded-lg"

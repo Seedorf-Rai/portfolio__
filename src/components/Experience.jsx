@@ -1,28 +1,21 @@
 import { motion } from "framer-motion";
+import { databases } from "../appwrite";
+import { useEffect, useState } from "react";
 function Education(){
- const education = [
-    {
-        id: 1,
-        year: '2015-2016',
-        degree: 'Bachelor of Science in Computer Science',
-        university: 'University of California, Berkeley',
-        description : 'Course of Computer Science  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque pariatur eum repudiandae officiis? Temporibus quibusdam libero rerum natus earum obcaecati porro aspernatur quia, expedita laboriosam tempora sunt totam quo et, ab nostrum necessitatibus nam laudantium doloribus. Non, commodi vel. Ut dolores ipsa enim dignissimos nisi fuga quam, placeat fugit commodi.'
-    },
-    {
-        id: 1,
-        year: '2015-2016',
-        degree: 'Bachelor of Science in Computer Science',
-        university: 'University of California, Berkeley',
-        description : 'Course of Computer Science  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque pariatur eum repudiandae officiis? Temporibus quibusdam libero rerum natus earum obcaecati porro aspernatur quia, expedita laboriosam tempora sunt totam quo et, ab nostrum necessitatibus nam laudantium doloribus. Non, commodi vel. Ut dolores ipsa enim dignissimos nisi fuga quam, placeat fugit commodi.'
-    },
-    {
-        id: 1,
-        year: '2015-2016',
-        degree: 'Bachelor of Science in Computer Science',
-        university: 'University of California, Berkeley',
-        description : 'Course of Computer Science  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque pariatur eum repudiandae officiis? Temporibus quibusdam libero rerum natus earum obcaecati porro aspernatur quia, expedita laboriosam tempora sunt totam quo et, ab nostrum necessitatibus nam laudantium doloribus. Non, commodi vel. Ut dolores ipsa enim dignissimos nisi fuga quam, placeat fugit commodi.'
-    }
- ];
+
+ const [education , setEducation] = useState([]);
+
+ const init = async () => {
+    const education = await databases.listDocuments(
+      import.meta.env.VITE_DATABASE_ID,
+      import.meta.env.VITE_COLLECTION_ID_EDUCATION
+    );
+    setEducation(education.documents);
+ };
+
+ useEffect(() => {
+    init();
+ }, []);
 
     return(
         <div className="border-b border-neutral-900
@@ -60,7 +53,7 @@ function Education(){
                        <h6 className="mb-2 font-semibold" >
                          {item.degree} - {" "}
                          <span className="text-sm text-purple-100">
-                            {item.university}
+                            {item.institution}
                          </span>
                        </h6>
                        <p className="mb-4 text-neutral-400">

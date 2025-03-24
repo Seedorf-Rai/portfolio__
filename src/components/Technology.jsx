@@ -1,80 +1,74 @@
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { databases } from "../appwrite";
+ // Adjust import as needed
 
 const iconVariants = (duration) => ({
-   initial : {
-      y: -10
-   },
-   animate : {
-      y : [10,-10],
-      transition : {
-         duration : duration,
-         ease : "linear",
-         repeat : Infinity,
-         repeatType : "reverse"
-      }
-   }
-})
+  initial: { y: -10 },
+  animate: {
+    y: [10, -10],
+    transition: {
+      duration: duration,
+      ease: "linear",
+      repeat: Infinity,
+      repeatType: "reverse",
+    },
+  },
+});
 
-function Technology(){
-    return(
-        <div className="border-b border-neutral-800
-        pb-24">
-          <motion.h1
-          whileInView={{ opacity: 1, y:0 }}
-            initial={{ opacity: 0, y: -100 }}
-            transition={{ duration: 1.5 }}
-          className="my-20 text-4xl text-center">
-             Technologies
-          </motion.h1>
+const colors = ["border-cyan-800", "border-green-400", "border-red-400", "border-yellow-400", "border-blue-400"];
+
+function Technology() {
+  const [technologies, setTechnologies] = useState([]);
+
+  const init = async () => {
+    try {
+      const response = await databases.listDocuments(
+        import.meta.env.VITE_DATABASE_ID,
+        import.meta.env.VITE_COLLECTION_ID_TECHNOLOGY
+      );
+      console.log(response.documents);
+      
+      setTechnologies(response.documents); // Assuming API returns an array of technology names
+    } catch (error) {
+      console.error("Error fetching technologies:", error);
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  return (
+    <div className="border-b border-neutral-800 pb-24">
+      <motion.h1
+        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: -100 }}
+        transition={{ duration: 1.5 }}
+        className="my-20 text-4xl text-center"
+      >
+        Technologies
+      </motion.h1>
+      <motion.div
+        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, x: -100 }}
+        transition={{ duration: 1.5 }}
+        className="flex flex-wrap items-center justify-center gap-4"
+      >
+        {technologies.map((tech, index) => (
           <motion.div
-         whileInView={{ opacity: 1, x:0 }}
-         initial={{ opacity: 0, x: -100 }}
-         transition={{ duration: 1.5 }}
-          className="flex flex-wrap items-center justify-center gap-4">
-           <motion.div
-             variants={iconVariants(2.5)}
-             initial="initial"
-             animate="animate"
-           className="rounded-2xl border-4 border-cyan-800 p-4">
-              Object Detection
-           </motion.div>
-           <motion.div
-             variants={iconVariants(3)}
-             initial="initial"
-             animate="animate"
-           className="rounded-2xl border-4 border-green-400 p-4">
-              Image Segmentation
-           </motion.div>
-           <motion.div
-             variants={iconVariants(2)}
-             initial="initial"
-             animate="animate"
-           className="rounded-2xl border-4 border-red-400 p-4">
-              Transformers
-           </motion.div>
-           <motion.div
-            variants={iconVariants(2.5)}
+            key={tech.$id} // Ensure unique key
+            variants={iconVariants(2 + Math.random() * 4)} // Random duration between 2-6
             initial="initial"
             animate="animate"
-           className="rounded-2xl border-4 border-cyan-800 p-4">
-              Computer Vision
-           </motion.div>
-           <motion.div
-             variants={iconVariants(2.5)}
-             initial="initial"
-             animate="animate"
-           className="rounded-2xl border-4 border-cyan-800 p-4">
-              Object Detection
-           </motion.div>
-           <motion.div
-             variants={iconVariants(6)}
-             initial="initial"
-             animate="animate"
-           className="rounded-2xl border-4 border-cyan-800 p-4">
-              Object Detection
-           </motion.div>
+            className={`rounded-2xl border-4 ${colors[index % colors.length]} p-4`}
+          >
+            {tech.name} {/* Assuming the document has a 'name' field */}
           </motion.div>
-        </div>
-    )
+        ))}
+      </motion.div>
+    </div>
+  );
 }
-export default Technology
+
+export default Technology;
