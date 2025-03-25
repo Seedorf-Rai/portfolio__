@@ -1,7 +1,7 @@
 import ProfilePic from "../../src/assets/kevinRushProfile.png"
 import { delay, motion } from "framer-motion"
-import { databases } from "../appwrite";
 import { useEffect, useState } from "react";
+import service from "../db";
 
 const container = (delay)=>({
     hidden : {x: -100 , opacity : 0},
@@ -20,7 +20,7 @@ const Hero = () => {
   const [intro , setIntro] = useState("");
 
   const init = async () => {
-    const intro = await databases.listDocuments(
+    const intro = await service.databases.listDocuments(
       import.meta.env.VITE_DATABASE_ID,
       import.meta.env.VITE_COLLECTION_ID_INTRO
     );
@@ -67,7 +67,7 @@ const Hero = () => {
           <div className="flex justify-center">
             <motion.img initial={{ x: 100, opacity: 0}}
             animate={{ x:0 , opacity: 1 }}
-            className="w-full object-cover"
+            className="w-full h-[500px] object-cover"
             transition={{ duration: 1 , delay: 1.2 }} src={intro.image} alt="" />
           </div>
         </div>

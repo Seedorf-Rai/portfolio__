@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
-import { databases } from "../appwrite";
 import { useEffect, useState } from "react";
+import service from "../db";
 function Education(){
 
  const [education , setEducation] = useState([]);
 
  const init = async () => {
-    const education = await databases.listDocuments(
+    const education = await service.databases.listDocuments(
       import.meta.env.VITE_DATABASE_ID,
       import.meta.env.VITE_COLLECTION_ID_EDUCATION
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { databases } from "../appwrite";
+import service from "../db";
 
 export default function RandD() {
   const [showAll, setShowAll] = useState(false);
@@ -14,7 +14,7 @@ export default function RandD() {
   // ];
   const [visibleProjects, setVisibleProjects] = useState([]);
   const init = async () => {
-    const rndd = await databases.listDocuments(
+    const rndd = await service.databases.listDocuments(
       import.meta.env.VITE_DATABASE_ID,
       import.meta.env.VITE_COLLECTION_ID_RANDP
     );

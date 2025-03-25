@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { databases } from "../appwrite";
+import service from "../db";
  // Adjust import as needed
 
 const iconVariants = (duration) => ({
@@ -23,12 +23,12 @@ function Technology() {
 
   const init = async () => {
     try {
-      const response = await databases.listDocuments(
+      const response = await service.databases.listDocuments(
         import.meta.env.VITE_DATABASE_ID,
         import.meta.env.VITE_COLLECTION_ID_TECHNOLOGY
       );
       console.log(response.documents);
-      
+
       setTechnologies(response.documents); // Assuming API returns an array of technology names
     } catch (error) {
       console.error("Error fetching technologies:", error);

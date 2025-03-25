@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import AboutPic from "../../src/assets/about.jpg"
 import { motion } from "framer-motion"
-import { databases } from "../appwrite";
+import service from "../db";
 function About(){
 
   const [about , setAbout] = useState("");
 
   const init = async () => {
-    const about = await databases.listDocuments(
+    const about = await service.databases.listDocuments(
       import.meta.env.VITE_DATABASE_ID,
       import.meta.env.VITE_COLLECTION_ID_ABOUT
     );
@@ -32,7 +32,7 @@ function About(){
             transition={{ duration: 0.5 }}
              className="w-full lg:w-1/2 lg:p-8">
              <div className="flex items-center justify-center">
-               <img className="rounded-2xl w-full h-auto object-cover" src={about.image} alt="" />
+               <img className="rounded-2xl w-full h-[400px] object-cover" src={about.image} alt="" />
              </div>
 
             </motion.div>

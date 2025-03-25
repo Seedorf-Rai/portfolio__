@@ -1,14 +1,49 @@
-import { Client, Account , Databases } from 'appwrite';
+import { Client, Account , Databases ,ID } from 'appwrite';
 
-const client = new Client();
+export class AuthService {
+  client = new Client();
+  account;
 
-client
-  .setEndpoint(import.meta.env.VITE_ENDPOINT) // Your Appwrite Endpoint
-  .setProject(import.meta.env.VITE_PROJECT_ID); // Your project ID
+  constructor() {
+    this.client.setEndpoint(import.meta.env.VITE_ENDPOINT);
+    this.client.setProject(import.meta.env.VITE_PROJECT_ID);
+    this.account = new Account(this.client);
+  }
 
+  async login({email, password}) {
+    try{
+      return await this.account.createEmailPasswordSession(email, password);
+    }
+    catch(error){
+      console.error(error);
+      return null;
+      }
+  }
 
-export const account = new Account(client);
+  async logout() {
+    try{
+      return await this.account.deleteSession('current');
+    }
+    catch(error){
+      console.error(error);
+      return null;
+    }
+  }
 
-export const databases = new Databases(client);
+  async isLoggedIn() {
+    try{
+      return await this.account.get();
+    }
+    catch(error){
+      console.error(error);
+      return null;
+    }
+  }
+
+}
+
+const authService = new AuthService();
+
+export default authService;
 
 
