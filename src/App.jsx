@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './Home';
 import Login from './auth/Login';
 import Layout from './auth/Layout';
-import Setting from './auth/dashboard/setting';
+import Setting from './auth/dashboard/Setting';
 import About from './auth/dashboard/About';
 import Education from './auth/dashboard/Education';
 import Intro from './auth/dashboard/Intro';
