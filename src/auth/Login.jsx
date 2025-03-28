@@ -18,7 +18,7 @@ function Login() {
       const response = await authService.login(form);
 
       if (response) {
-        navigate("/");
+        navigate("/dashboard");
       } else {
         setError("Invalid email or password. Please try again.");
       }

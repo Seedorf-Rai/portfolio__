@@ -7,19 +7,22 @@ function About(){
   const [about , setAbout] = useState("");
 
   const init = async () => {
-    const about = await service.databases.listDocuments(
-      import.meta.env.VITE_DATABASE_ID,
-      import.meta.env.VITE_COLLECTION_ID_ABOUT
-    );
-    setAbout(about.documents[0]);
+    const about = await service.getAbout();
+    if(about?.documents?.length > 0){
+      const aboutData = about.documents[0]; // Taking the first document
+      aboutData.image = await service.getFileURL(aboutData.image); // Fetch the file preview URL from Appwrite Storage
+      setAbout(aboutData);
+    }
   };
 
   useEffect(() => {
     init();
   }, []);
 
-  return(
-        <div className="border-b border-neutral-900 pb-4">
+  return <>
+   {
+    about ?
+    <div className="border-b border-neutral-900 pb-4">
           <h1 className="my-20 text-center text-4xl">
             About <span className="text-neutral-500">
             Me
@@ -50,6 +53,11 @@ function About(){
              </motion.div>
           </div>
         </div>
-    )
+        :
+        <div className="h-[100vh">
+
+        </div>
+   }
+  </>
 }
 export default About

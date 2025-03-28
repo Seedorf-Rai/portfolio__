@@ -17,8 +17,10 @@ function Education(){
     init();
  }, []);
 
-    return(
-        <div className="border-b border-neutral-900
+    return <>
+     {
+      education.length > 0 ?
+      <div className="border-b border-neutral-900
         pb-4">
          <motion.h1
          whileInView={{ opacity: 1, y:0 }}
@@ -40,7 +42,7 @@ function Education(){
                        <p className="mb-2 text-sm
                        text-neutral-400" >
                         {
-                            item.year
+                            item.date
                         }
                        </p>
                      </motion.div>
@@ -51,9 +53,9 @@ function Education(){
                      className="w-full max-w-xl
                      lg:w-3/4 ">
                        <h6 className="mb-2 font-semibold" >
-                         {item.degree} - {" "}
+                         {item.level} - {" "}
                          <span className="text-sm text-purple-100">
-                            {item.institution}
+                            {item.institute}
                          </span>
                        </h6>
                        <p className="mb-4 text-neutral-400">
@@ -67,6 +69,9 @@ function Education(){
         }
          </div>
         </div>
-    )
+        :
+        ''
+     }
+    </>
 }
 export default Education

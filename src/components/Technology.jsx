@@ -39,36 +39,39 @@ function Technology() {
     init();
   }, []);
 
-  return (
-    <div className="border-b border-neutral-800 pb-24">
-      <motion.h1
-        whileInView={{ opacity: 1, y: 0 }}
-        initial={{ opacity: 0, y: -100 }}
-        transition={{ duration: 1.5 }}
-        className="my-20 text-4xl text-center"
-      >
-        Technologies
-      </motion.h1>
-      <motion.div
-        whileInView={{ opacity: 1, x: 0 }}
-        initial={{ opacity: 0, x: -100 }}
-        transition={{ duration: 1.5 }}
-        className="flex flex-wrap items-center justify-center gap-4"
-      >
-        {technologies.map((tech, index) => (
-          <motion.div
-            key={tech.$id} // Ensure unique key
-            variants={iconVariants(2 + Math.random() * 4)} // Random duration between 2-6
-            initial="initial"
-            animate="animate"
-            className={`rounded-2xl border-4 ${colors[index % colors.length]} p-4`}
-          >
-            {tech.name} {/* Assuming the document has a 'name' field */}
-          </motion.div>
-        ))}
-      </motion.div>
-    </div>
-  );
+  return <>
+   {
+    technologies.length > 0 ?  <div className="border-b border-neutral-800 pb-24">
+    <motion.h1
+      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: -100 }}
+      transition={{ duration: 1.5 }}
+      className="my-20 text-4xl text-center"
+    >
+      Technologies
+    </motion.h1>
+    <motion.div
+      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, x: -100 }}
+      transition={{ duration: 1.5 }}
+      className="flex flex-wrap items-center justify-center gap-4"
+    >
+      {technologies.map((tech, index) => (
+        <motion.div
+          key={tech.$id} // Ensure unique key
+          variants={iconVariants(2 + Math.random() * 4)} // Random duration between 2-6
+          initial="initial"
+          animate="animate"
+          className={`rounded-2xl border-4 ${colors[index % colors.length]} p-4`}
+        >
+          {tech.name} {/* Assuming the document has a 'name' field */}
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+  : ''
+   }
+  </>
 }
 
 export default Technology;

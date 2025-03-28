@@ -14,12 +14,20 @@ export default function RandD() {
   // ];
   const [visibleProjects, setVisibleProjects] = useState([]);
   const init = async () => {
-    const rndd = await service.databases.listDocuments(
-      import.meta.env.VITE_DATABASE_ID,
-      import.meta.env.VITE_COLLECTION_ID_PROJECT
-    );
-    setProjects(rndd.documents);
-    console.log(rndd.documents);
+    const response = await service.getProjects();
+            if (response) {
+                // Convert file IDs into URLs
+                const projectsWithImages = await Promise.all(
+                    response.documents.map(async (project) => {
+                        if (project.image) {
+                            project.image = await service.getFileURL(project.image);
+                        }
+                        return project;
+                    })
+                );
+
+                setProjects(projectsWithImages);
+              }
 
   };
 
@@ -72,6 +80,9 @@ export default function RandD() {
             >
               <h6 className="mb-2 font-semibold">{project.title}</h6>
               <p className="mb-4 text-neutral-400">{project.description}</p>
+              <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-sky-800 mb-4 text-sm  mt-2 block">
+                View Research
+              </a>
               <div className="flex flex-wrap  ">
               {project.technologies.map((tech, index) => (
 
